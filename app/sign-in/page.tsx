@@ -1,10 +1,12 @@
 'use client';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 const isProd = process.env.NODE_ENV === 'production';
+
 export default function SignIn() {
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
+	const router = useRouter();
 	isLoggedIn().then(setLoggedIn);
 	async function isLoggedIn() {
 		let {
@@ -17,9 +19,15 @@ export default function SignIn() {
 		await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {
-				redirectTo: `http${isProd && 's'}://${window.location.host}/sign-in`,
+				redirectTo: `http${isProd ? 's' : ''}://${
+					window.location.host
+				}/sign-in`,
 			},
 		});
+	}
+	async function signOut() {
+		await supabase.auth.signOut();
+		router.refresh();
 	}
 
 	return (
@@ -35,7 +43,8 @@ export default function SignIn() {
 			{loggedIn && (
 				<p>
 					<b>
-						Already logged in! <Link href="/">Account Settings {'->'}</Link>
+						Already logged in!{' '}
+						<button onClick={() => signOut()}>Sign Out?</button>
 					</b>
 				</p>
 			)}
