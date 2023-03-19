@@ -2,11 +2,10 @@
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { useState } from 'react';
-
+const isProd = process.env.NODE_ENV === 'production';
 export default function SignIn() {
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
 	isLoggedIn().then(setLoggedIn);
-
 	async function isLoggedIn() {
 		let {
 			data: { user },
@@ -18,7 +17,7 @@ export default function SignIn() {
 		await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {
-				redirectTo: `http://${window.location.host}/sign-in`,
+				redirectTo: `http${isProd && 's'}://${window.location.host}/sign-in`,
 			},
 		});
 	}
