@@ -1,13 +1,17 @@
 'use client';
+
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
 const isProd = process.env.NODE_ENV === 'production';
 
 export default function SignIn() {
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
 	const router = useRouter();
+
 	isLoggedIn().then(setLoggedIn);
+
 	async function isLoggedIn() {
 		let {
 			data: { user },
@@ -25,13 +29,14 @@ export default function SignIn() {
 			},
 		});
 	}
+
 	async function signOut() {
 		await supabase.auth.signOut();
 		router.refresh();
 	}
 
 	return (
-		<div>
+		<main className="p-4 lg:p-8">
 			<h1>Sign In using Google.</h1>
 			<button
 				onClick={() => {
@@ -48,6 +53,6 @@ export default function SignIn() {
 					</b>
 				</p>
 			)}
-		</div>
+		</main>
 	);
 }

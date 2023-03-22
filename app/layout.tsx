@@ -1,7 +1,5 @@
-import { Inter } from 'next/font/google';
 import { Navbar } from './components';
 import './global.css';
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
 	title: 'Qrook',
@@ -14,7 +12,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className={inter.className}>
+		<html lang="en" className="leading-normal tracking-wide text-neutral-600">
+			<head>
+				<link rel="preconnect" href="https://rsms.me/" />
+				<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+			</head>
 			<body>
 				<Navbar />
 				{children}
