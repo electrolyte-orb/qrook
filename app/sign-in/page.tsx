@@ -2,22 +2,41 @@
 
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { Loader, Main } from '../components';
 const isProd = process.env.NODE_ENV === 'production';
 
 export default function SignIn() {
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
 	const router = useRouter();
+	useEffect(() => {
+		supabase.auth.getSession().then(({ data }) => {
+			if (data.session !== null) {
+				setLoggedIn(true);
+			}
+			if (data.session === null) {
+				setLoggedIn(false);
+			}
+			setLoading(false);
+		});
+	});
+	useEffect(() => {
+		const subscription = supabase.auth.onAuthStateChange((e) => {
+			if (e === 'SIGNED_IN') {
+				setLoggedIn(true);
+			}
+			if (e === 'SIGNED_OUT') {
+				setLoggedIn(false);
+			}
+			console.log(e);
+			setLoading(false);
+		});
 
-	isLoggedIn().then(setLoggedIn);
-
-	async function isLoggedIn() {
-		let {
-			data: { user },
-		} = await supabase.auth.getUser();
-		return user?.role === 'authenticated';
-	}
+		return () => {
+			subscription.data.subscription.unsubscribe();
+		};
+	}, []);
 
 	async function signInWithGoogle() {
 		await supabase.auth.signInWithOAuth({
@@ -32,19 +51,22 @@ export default function SignIn() {
 
 	async function signOut() {
 		await supabase.auth.signOut();
+		setLoading(true);
 		router.refresh();
 	}
 
 	return (
-		<main className="p-4 lg:p-8">
-			<h1>Sign In using Google.</h1>
+		<Main>
+			<h1 className="font-bold text-4xl text-black">Authentication</h1>
 			<button
 				onClick={() => {
 					signInWithGoogle();
 				}}
+				className="inline-block text-sm mt-8 px-4 py-2 rounded shadow-md bg-emerald-500 focus:ring-4 focus:ring-emerald-100 transition text-white"
 			>
-				Google Sign in {'->'}
+				Google Account {'->'}
 			</button>
+			{loading && <Loader />}
 			{loggedIn && (
 				<p>
 					<b>
@@ -53,6 +75,6 @@ export default function SignIn() {
 					</b>
 				</p>
 			)}
-		</main>
+		</Main>
 	);
 }

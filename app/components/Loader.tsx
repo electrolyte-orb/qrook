@@ -1,7 +1,7 @@
 import { HTMLAttributes } from 'react';
 export default function Loader() {
 	return (
-		<div className="p-8 flex justify-center">
+		<div className="p-8 mt-10 flex justify-center">
 			<div className="w-16 h-16 grid place-items-center">
 				<Icon className="w-8 h-8 inline-block" />
 				<span

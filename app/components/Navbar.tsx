@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
 	return (
-		<div className="w-full flex justify-between items-center p-4 lg:px-8 bg-neutral-800 text-neutral-400 border-b-2 border-neutral-500">
+		<div className="w-full flex justify-between items-center py-4 px-8 bg-neutral-800 text-neutral-400 border-b-2 border-neutral-500">
 			<Link href="/">
 				<h1 className="font-bold text-white">
 					<span className="inline-block w-4 h-1 bg-emerald-500 rounded-full mr-2 relative">
