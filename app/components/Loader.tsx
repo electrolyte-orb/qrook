@@ -4,20 +4,19 @@ export default function Loader({
 }: {
 	size?: 'small' | 'large' | 'full-width' | 'square';
 }) {
-	let sizeProps;
-
+	let sizePropsContainer;
 	switch (size) {
 		case 'square':
-			sizeProps = 'p-2 flex justify-center';
+			sizePropsContainer = 'inline-block';
 			break;
 
 		default:
-			sizeProps = 'p-8 mt-10 flex justify-center';
+			sizePropsContainer = 'p-8 mt-10 flex justify-center';
 			break;
 	}
 
 	return (
-		<div className={sizeProps}>
+		<div className={sizePropsContainer}>
 			<div className="w-16 h-16 grid place-items-center">
 				<Icon className="w-8 h-8 inline-block" />
 				<span
