@@ -1,7 +1,23 @@
 import { HTMLAttributes } from 'react';
-export default function Loader() {
+export default function Loader({
+	size,
+}: {
+	size?: 'small' | 'large' | 'full-width' | 'square';
+}) {
+	let sizeProps;
+
+	switch (size) {
+		case 'square':
+			sizeProps = 'p-2 flex justify-center';
+			break;
+
+		default:
+			sizeProps = 'p-8 mt-10 flex justify-center';
+			break;
+	}
+
 	return (
-		<div className="p-8 mt-10 flex justify-center">
+		<div className={sizeProps}>
 			<div className="w-16 h-16 grid place-items-center">
 				<Icon className="w-8 h-8 inline-block" />
 				<span
